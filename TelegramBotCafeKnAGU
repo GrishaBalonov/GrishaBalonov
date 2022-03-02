@@ -1,0 +1,95 @@
+using System;
+using System.Collections.Generic;
+using Telegram.Bot;
+using Telegram.Bot.Args;
+using Telegram.Bot.Types.ReplyMarkups;
+
+namespace Telegram_Bot
+{
+    class Program
+    {
+        private static string Token { get; set; } = "5128554107:AAHNJxdKPvvj--D1y3kyMdy0Hbn6NT5P2PU";
+        private static TelegramBotClient client;
+
+        static void Main(string[] args)
+        {
+            client = new TelegramBotClient(Token);
+            client.StartReceiving();
+            client.OnMessage += OnMessageHandler;
+            Console.ReadLine();
+            client.StopReceiving();
+        }
+
+        private static async void OnMessageHandler(object sender, MessageEventArgs e)
+        {
+            var msg = e.Message;
+            if (msg.Text != null)
+            {
+                Console.WriteLine($"Пришло сообщение с текстом: {msg.Text}");
+                switch (msg.Text)
+                {
+                    case "Понедельник":
+                        await client.SendTextMessageAsync(
+                            chatId: msg.Chat.Id,
+                            text: "Cуп с фрикадельками",
+                            replyToMessageId: msg.MessageId,
+                            replyMarkup: GetButtons());
+                        break;
+                    case "Вторник":
+                        await client.SendTextMessageAsync(
+                            chatId: msg.Chat.Id,
+                            text: "Рыба в духовке с овощами",
+                            replyToMessageId: msg.MessageId,
+                            replyMarkup: GetButtons());
+                        break;
+                    case "Среда":
+                        await client.SendTextMessageAsync(
+                            chatId: msg.Chat.Id,
+                            text: "Салат из овощей",
+                            replyToMessageId: msg.MessageId,
+                            replyMarkup: GetButtons());
+                        break;
+                    case "Четверг":
+                        await client.SendTextMessageAsync(
+                            chatId: msg.Chat.Id,
+                            text: "Блины с мясом",
+                            replyToMessageId: msg.MessageId,
+                            replyMarkup: GetButtons());
+                        break;
+                    case "Пятница":
+                        await client.SendTextMessageAsync(
+                            chatId: msg.Chat.Id,
+                            text: "Борщ на мясном бульоне",
+                            replyToMessageId: msg.MessageId,
+                            replyMarkup: GetButtons());
+                        break;
+                    case "Суббота":
+                        await client.SendTextMessageAsync(
+                            chatId: msg.Chat.Id,
+                            text: "Плов с курицей",
+                            replyToMessageId: msg.MessageId,
+                            replyMarkup: GetButtons());
+                        break;
+
+                    default:
+                        await client.SendTextMessageAsync(msg.Chat.Id, "Выберите команду: ", replyMarkup: GetButtons());
+                        break;
+                }
+            }
+        }
+
+        private static IReplyMarkup GetButtons()
+        {
+            return new ReplyKeyboardMarkup
+            {
+                Keyboard = new List<List<KeyboardButton>>
+                {
+                    new List<KeyboardButton>{ new KeyboardButton { Text = "Понедельник" }, new KeyboardButton { Text = "Вторник" } },
+                    new List<KeyboardButton>{ new KeyboardButton { Text = "Среда"}, new KeyboardButton { Text = "Четверг" } },
+                    new List<KeyboardButton>{ new KeyboardButton { Text = "Пятница" }, new KeyboardButton { Text = "Суббота" } }
+                }
+            };
+        }
+    }
+}
+
